@@ -1,6 +1,9 @@
 from flask import Flask, request, render_template, jsonify
 from YoutubeTags import videotags
 import random
+import logging
+from logging.handlers import RotatingFileHandler
+
 
 app = Flask(__name__)
 
@@ -22,5 +25,8 @@ def shuffle_tags():
     return jsonify(tags)
 
 if __name__ == '__main__':
+    handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
+    handler.setLevel(logging.INFO)
+    app.logger.addHandler(handler)
     app.run(host='0.0.0.0', port=5000, debug=True)
 
