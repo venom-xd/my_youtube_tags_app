@@ -6,9 +6,15 @@ import aspose.pdf as ap
 import io
 import tempfile
 import os
-import urllib.parse
+from YoutubeTags import videotags
 
 app = Flask(__name__)
+
+# Configure logging
+handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
+handler.setLevel(logging.INFO)
+app.logger.addHandler(handler)
+app.logger.setLevel(logging.INFO)
 
 @app.route('/')
 def home():
@@ -47,29 +53,35 @@ def compress_pdf():
             # Get input PDF size
             input_size_kb = len(input_pdf) / 1024
 
-            # Compress the PDF
-            compressed_pdf, output_filename = compress_pdf_bytes(input_pdf, compression_mode)
+            try:
+                # Compress the PDF
+                compressed_pdf, output_filename = compress_pdf_bytes(input_pdf, compression_mode)
 
-            # Get output PDF size
-            output_size_kb = len(compressed_pdf) / 1024
-            compressed_kb = input_size_kb - output_size_kb
+                # Get output PDF size
+                output_size_kb = len(compressed_pdf) / 1024
+                compressed_kb = input_size_kb - output_size_kb
 
-            # Create a temporary file for the compressed PDF
-            temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
-            temp_file.write(compressed_pdf)
-            temp_file.flush()  # Ensure all data is written to the file
-            temp_file.close()
+                # Create a temporary file for the compressed PDF
+                temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+                temp_file.write(compressed_pdf)
+                temp_file.flush()  # Ensure all data is written to the file
+                temp_file.close()
 
-            # URL encode the filename to handle spaces
-            file_url = url_for('download_file', filename=urllib.parse.quote(os.path.basename(temp_file.name)))
+                file_url = url_for('download_file', filename=os.path.basename(temp_file.name))
 
-            return render_template(
-                'result.html',
-                file_url=file_url,
-                input_size=f"{input_size_kb:.2f} KB",
-                output_size=f"{output_size_kb:.2f} KB",
-                compressed_size=f"{compressed_kb:.2f} KB"
-            )
+                app.logger.info(f"File compressed successfully: {file_url}")
+
+                return render_template(
+                    'result.html',
+                    file_url=file_url,
+                    input_size=f"{input_size_kb:.2f} KB",
+                    output_size=f"{output_size_kb:.2f} KB",
+                    compressed_size=f"{compressed_kb:.2f} KB"
+                )
+
+            except Exception as e:
+                app.logger.error(f"Error compressing PDF: {e}")
+                return "Error compressing PDF"
 
         return "Invalid file type"
 
@@ -77,9 +89,16 @@ def compress_pdf():
 
 @app.route('/download/<filename>')
 def download_file(filename):
-    # Decode the filename from URL encoding
-    filename = urllib.parse.unquote(filename)
-    return send_file(os.path.join(tempfile.gettempdir(), filename), as_attachment=True, download_name=filename, mimetype='application/pdf')
+    try:
+        file_path = os.path.join(tempfile.gettempdir(), filename)
+        if os.path.exists(file_path):
+            return send_file(file_path, as_attachment=True, download_name=filename, mimetype='application/pdf')
+        else:
+            app.logger.error(f"File not found: {file_path}")
+            return "File not found"
+    except Exception as e:
+        app.logger.error(f"Error downloading file: {e}")
+        return "Error downloading file"
 
 def compress_pdf_bytes(pdf_bytes, compression_mode):
     """Compress PDF using Aspose.PDF based on compression mode"""
@@ -114,11 +133,9 @@ def compress_pdf_bytes(pdf_bytes, compression_mode):
         output_filename = f"{compression_mode}_compressed.pdf"
 
         return output_stream.getvalue(), output_filename
-    except ap.exceptions.AsposeException as e:
-        app.logger.error(f"Aspose error during PDF compression: {e}")
     except Exception as e:
         app.logger.error(f"Error compressing PDF bytes: {e}")
-    return b"", "compressed.pdf"
+        return b"", "compressed.pdf"
 
 if __name__ == '__main__':
     handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
