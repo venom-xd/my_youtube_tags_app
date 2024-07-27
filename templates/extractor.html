@@ -56,6 +56,15 @@
         .buttons button:hover {
             background-color: #218838;
         }
+        .home-link {
+            margin-top: 20px;
+            display: block;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
     </style>
     <script>
         function copyToClipboard(text) {
@@ -112,5 +121,6 @@
             <button onclick="copyTagsWithHash()">Copy All Tags with #</button>
         </div>
     {% endif %}
+    <a href="/" class="home-link">Home</a>
 </body>
 </html>
