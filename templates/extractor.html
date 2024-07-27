@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Tags Extractor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .tags {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .tags ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .tags ul li {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .buttons button:hover {
+            background-color: #218838;
+        }
+    </style>
+    <script>
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            document.body.appendChild(tempInput);
+            tempInput.value = text;
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Tags copied to clipboard!');
+        }
+
+        function getAllTags() {
+            const tags = Array.from(document.querySelectorAll('.tags ul li')).map(li => li.innerText);
+            return tags.join(', ');
+        }
+
+        function getAllTagsWithHash() {
+            const tags = Array.from(document.querySelectorAll('.tags ul li')).map(li => {
+                let tag = li.innerText.trim();
+                return tag.startsWith('#') ? tag : `#${tag}`;
+            });
+            return tags.join(', ');
+        }
+
+        function copyTags() {
+            const tags = getAllTags();
+            copyToClipboard(tags);
+        }
+
+        function copyTagsWithHash() {
+            const tags = getAllTagsWithHash();
+            copyToClipboard(tags);
+        }
+    </script>
+</head>
+<body>
+    <h1>YouTube Tags Extractor</h1>
+    <form action="/youtubetagextract" method="post">
+        <input type="text" name="youtube_link" placeholder="Enter YouTube Link" required>
+        <input type="submit" value="Get Tags">
+    </form>
+    {% if tags %}
+        <div class="tags">
+            <h2>Extracted Tags:</h2>
+            <ul>
+                {% for tag in tags %}
+                    <li>{{ tag }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="buttons">
+            <button onclick="copyTags()">Copy All Tag As Plain Text</button>
+            <button onclick="copyTagsWithHash()">Copy All Tags with #</button>
+        </div>
+    {% endif %}
+</body>
+</html>
