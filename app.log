@@ -1,2 +1,12 @@
 File compressed successfully: /download/tmpn270zprs.pdf
 File compressed successfully: /download/tmpn270zprs.pdf
+Error compressing PDF: 'PdfWriter' object has no attribute 'remove_metadata'
+Error compressing PDF: Page must be part of a PdfWriter
+Error compressing PDF: Invalid quality setting
+Error compressing PDF: Page must be part of a PdfWriter
+Error compressing PDF: Page must be part of a PdfWriter
+Error compressing PDF: Page must be part of a PdfWriter
+Error extracting images from PDF: name 'base64' is not defined
+Error extracting images from PDF: name 'base64' is not defined
+Error extracting images from PDF: name 'base64' is not defined
+Error extracting images from PDF: name 'base64' is not defined

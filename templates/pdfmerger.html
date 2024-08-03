@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Merger</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+        .upload-section {
+            border: 2px dashed #007BFF;
+            padding: 40px;
+            margin: 20px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            background-color: #ffffff;
+            transition: background-color 0.3s ease;
+        }
+        .upload-section.dragover {
+            background-color: #e0f7ff;
+        }
+        .file-input-container {
+            margin-top: 20px;
+        }
+        .file-input-container p {
+            font-size: 1.2em;
+            color: #555;
+        }
+        .file-input-container input[type="file"] {
+            display: none;
+        }
+        .file-input-container label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .file-input-container label:hover {
+            background-color: #0056b3;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .result p {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .result a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .result a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>PDF Merger</h1>
+    
+    <!-- Drag and Drop Section -->
+    <div class="upload-section" id="uploadSection">
+        <p>Drag and drop PDF files here</p>
+    </div>
+    
+    <!-- File Input Section -->
+    <div class="file-input-container">
+        <p>Or click below to select PDF files</p>
+        <input type="file" id="fileInput" name="pdf_files" multiple>
+        <label for="fileInput">Select Files</label>
+    </div>
+    
+    <button id="mergeButton">Merge PDFs</button>
+    <div class="result" id="result"></div>
+
+    <script>
+        const uploadSection = document.getElementById('uploadSection');
+        const fileInput = document.getElementById('fileInput');
+        const mergeButton = document.getElementById('mergeButton');
+        const resultDiv = document.getElementById('result');
+
+        let selectedFiles = [];
+
+        // Handle drag and drop
+        uploadSection.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            uploadSection.classList.add('dragover');
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.classList.remove('dragover');
+        });
+
+        uploadSection.addEventListener('drop', (event) => {
+            event.preventDefault();
+            uploadSection.classList.remove('dragover');
+            const files = Array.from(event.dataTransfer.files);
+
+            // Merge dropped files with already selected files
+            selectedFiles = [...selectedFiles, ...files];
+            updateFileDisplay();
+        });
+
+        // Handle file selection through click
+        fileInput.addEventListener('change', () => {
+            const files = Array.from(fileInput.files);
+            selectedFiles = [...selectedFiles, ...files];
+            updateFileDisplay();
+        });
+
+        function updateFileDisplay() {
+            if (selectedFiles.length === 0) {
+                resultDiv.innerHTML = `<p>No files selected.</p>`;
+                return;
+            }
+            const fileNames = selectedFiles.map(file => file.name).join(', ');
+            resultDiv.innerHTML = `<p>Selected files: ${fileNames}</p>`;
+        }
+
+        mergeButton.addEventListener('click', async () => {
+            if (selectedFiles.length < 2) {
+                alert('Please upload at least two PDF files.');
+                return;
+            }
+            
+            const formData = new FormData();
+            for (const file of selectedFiles) {
+                formData.append('pdf_files', file);
+            }
+
+            const response = await fetch('/merge', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            if (data.success) {
+                resultDiv.innerHTML = `<p>Download merged PDF: <a href="${data.file_url}" download>${data.file_url}</a></p>`;
+            } else {
+                alert('An error occurred while merging PDFs.');
+            }
+        });
+    </script>
+</body>
+</html>
