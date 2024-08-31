@@ -2,3 +2,6 @@ Flask
 YoutubeTags
 aspose-pdf
 pypdf
+Pillow
+
+
