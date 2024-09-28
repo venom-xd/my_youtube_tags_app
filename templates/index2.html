@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Cron Expression Parser</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      height: 100vh; /* Full height of the viewport */
+      display: flex; /* Use flexbox for centering */
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+    }
+
+    .container {
+      max-width: 800px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center; /* Center text in container */
+    }
+
+    h1 {
+      color: #007bff;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 20px; /* Increased padding for larger input */
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 24px; /* Increased font size for better visibility */
+      border: 2px solid #007bff; /* Thicker border for emphasis */
+      border-radius: 4px;
+      box-sizing: border-box; /* Ensure padding is included in width */
+      display: inline-block; /* Aligns with center */
+    }
+
+    .result {
+      margin-top: 20px;
+      background-color: #e9ecef;
+      padding: 15px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .sc-bdVaJa {
+      margin-top: 30px;
+    }
+
+    .sc-htpNat {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .sc-bwzfXH {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .sc-bwzfXH th,
+    .sc-bwzfXH td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .sc-bwzfXH th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    /* SEO tags */
+    meta[name="keywords"] {
+      content: "cron, cron expression, scheduling, cron job, automation";
+    }
+
+    meta[name="description"] {
+      content: "A simple and intuitive cron expression parser with examples and detailed information.";
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2S5X0ELT9H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-2S5X0ELT9H');
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Cron Expression Parser</h1>
+    <!-- Set default value for cron expression -->
+    <input type="text" id="cronExpression" value="* * * * *" placeholder="Enter cron expression" />
+    <div class="result">
+      <p><strong>Description:</strong> <span id="description"></span></p>
+      <p><strong>Next Run Time:</strong> <span id="nextRunTime"></span></p>
+    </div>
+
+    <div class="sc-bdVaJa">
+      <div class="sc-htpNat">The cron expression is made of five fields. Each field can have the following values.</div>
+      <table class="sc-bwzfXH">
+        <thead>
+          <tr>
+            <th>*</th>
+            <th>*</th>
+            <th>*</th>
+            <th>*</th>
+            <th>*</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>minute (0-59)</td>
+            <td>hour (0 - 23)</td>
+            <td>day of the month (1 - 31)</td>
+            <td>month (1 - 12)</td>
+            <td>day of the week (0 - 6)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="sc-htpNat">Here are some examples for you.</div>
+      <table class="sc-bwzfXH">
+        <thead>
+          <tr>
+            <th>Cron expression</th>
+            <th>Schedule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>* * * * *</td>
+            <td>Every minute</td>
+          </tr>
+          <tr>
+            <td>0 * * * *</td>
+            <td>Every hour</td>
+          </tr>
+          <tr>
+            <td>0 0 * * *</td>
+            <td>Every day at 12:00 AM</td>
+          </tr>
+          <tr>
+            <td>0 0 * * FRI</td>
+            <td>At 12:00 AM, only on Friday</td>
+          </tr>
+          <tr>
+            <td>0 0 1 * *</td>
+            <td>At 12:00 AM, on day 1 of the month</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function updateCron() {
+      const cronExpression = document.getElementById('cronExpression').value;
+      if (!cronExpression) return;
+
+      fetch('/parse', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ cron: cronExpression })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          document.getElementById('description').innerText = "Invalid cron expression";
+          document.getElementById('nextRunTime').innerText = "N/A";
+        } else {
+          document.getElementById('description').innerText = data.description;
+          document.getElementById('nextRunTime').innerText = data.nextRunTime;
+        }
+      })
+      .catch(error => {
+        document.getElementById('description').innerText = "Error parsing cron expression";
+        document.getElementById('nextRunTime').innerText = "N/A";
+      });
+    }
+
+    // Automatically fetch and update without clicking a button
+    document.getElementById('cronExpression').addEventListener('input', updateCron);
+
+    // Fetch initial cron expression details on page load
+    document.addEventListener('DOMContentLoaded', updateCron);
+  </script>
+</body>
+
+</html>
