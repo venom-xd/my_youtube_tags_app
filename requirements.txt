@@ -3,5 +3,6 @@ YoutubeTags
 aspose-pdf
 pypdf
 Pillow
-croniter //app2
-cron-descriptor //app2
+#app2
+croniter 
+cron-descriptor 
