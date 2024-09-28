@@ -35,4 +35,7 @@ def parse_cron():
         return jsonify({'error': str(e)}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
+    handler.setLevel(logging.INFO)
+    app.logger.addHandler(handler)
+    app.run(host='0.0.0.0', port=5000, debug=True)
