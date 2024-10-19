@@ -3,29 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Page</title>
+    <title>Home - Toolzipz</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F2NZDXMN6P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-F2NZDXMN6P');
+
+      // Event tracking function
+      function trackEvent(action, category, label) {
+          gtag('event', action, {
+              'event_category': category,
+              'event_label': label,
+          });
+      }
+
+      // Example: Add event tracking to buttons
+      window.onload = function() {
+          // Track page view
+          trackEvent('page_view', 'Page', 'Home');
+
+          // Track button clicks
+          document.querySelector('.btn-primary').addEventListener('click', function() {
+              trackEvent('click', 'Button', 'Cron Job Parser');
+          });
+
+          document.querySelector('.btn-secondary').addEventListener('click', function() {
+              trackEvent('click', 'Button', 'Color Picker');
+          });
+
+          document.querySelector('.btn-success').addEventListener('click', function() {
+              trackEvent('click', 'Button', 'IPO Watch');
+          });
+
+          document.querySelector('.btn-info').addEventListener('click', function() {
+              trackEvent('click', 'Button', 'Upcoming IPOs');
+          });
+      };
+    </script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #343a40; /* Dark color for uniformity */
+        }
+        .card-header {
+            font-size: 1.25rem;
+            font-weight: bold;
+            background-color: #007bff; /* Bootstrap primary color */
+            color: white; /* White text on blue background */
+        }
+        .half-width {
+            width: 48%;
+        }
+        .btn {
+            margin: 5px 0; /* Uniform button spacing */
+            background-color: #80c0ff; /* Light blue background */
+            border: none; /* No border */
+        }
+        .btn:hover {
+            background-color: #66b3ff; /* Slightly darker blue on hover */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Welcome to the Flask App</h1>
-        <p>Select an option below:</p>
-        <ul class="list-group">
-            <li class="list-group-item">
-                <a href="/cron" class="btn btn-primary">Cron Job Parser</a>
-            </li>
-            <li class="list-group-item">
-                <a href="/color_picker" class="btn btn-secondary">Color Picker</a>
-            </li>
-            <li class="list-group-item">
-                <a href="/ipo-watch" class="btn btn-success">IPO Watch</a>
-            </li>
-            <li class="list-group-item">
-                <a href="/upcomingipo" class="btn btn-info">Upcoming IPOs</a>
-            </li>
-        </ul>
+        <h1>Welcome to Toolzipz</h1>
+        
+        <div class="row mb-4">
+            <div class="col-md-6 half-width">
+                <!-- Upcoming IPOs Dashboard -->
+                <div class="card mb-4">
+                    <div class="card-header">Upcoming IPOs</div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>IPO Name</th>
+                                    <th>Issue Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="upcoming-ipo-data">
+                                {% for row in upcoming_ipo_data %}
+                                    <tr>
+                                        <td>{{ row[0] }}</td>
+                                        <td>{{ row[1] }}</td>
+                                        <td>{{ row[2] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <a href="/upcomingipo" class="btn btn-info">View All Upcoming IPOs</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 half-width">
+                <!-- GMP Dashboard -->
+                <div class="card mb-4">
+                    <div class="card-header">Grey Market Premium (GMP)</div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>IPO Name</th>
+                                    <th>GMP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gmp-data">
+                                {% for row in gmp_data %}
+                                    <tr>
+                                        <td>{{ row[0] }}</td>
+                                        <td>{{ row[1] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <a href="/ipo-watch" class="btn btn-success">View All GMPs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p>You can also try:</p>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <a href="/cron" class="btn btn-primary btn-block">Cron Job Parser</a>
+            </div>
+            <div class="col-md-6">
+                <a href="/color_picker" class="btn btn-secondary btn-block">Color Picker</a>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <a href="/ipo-watch" class="btn btn-success btn-block">IPO Watch</a>
+            </div>
+            <div class="col-md-6">
+                <a href="/upcomingipo" class="btn btn-info btn-block">Upcoming IPOs</a>
+            </div>
+        </div>
     </div>
-    
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
