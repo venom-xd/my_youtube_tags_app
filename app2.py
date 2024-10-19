@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify, render_template
-
 from cron_descriptor import get_description
 from datetime import datetime
 from croniter import croniter
@@ -9,6 +8,10 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index2.html')
+
+@app.route('/cron')
+def cron():
+    return render_template('color_picker.html')  # Serve the color picker page
 
 @app.route('/parse', methods=['POST'])
 def parse_cron():
@@ -36,4 +39,3 @@ def parse_cron():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-
