@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming IPOs</title>
+    <link rel="stylesheet" href="static/styles.css"> <!-- Link to your CSS file -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-transform: uppercase;
+        }
+        h2 {
+            color: #333;
+            margin-top: 40px;
+            font-size: 2em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff; /* Blue background for header */
+            color: white; /* White text for header */
+        }
+        tr:hover {
+            background-color: #f1f1f1; /* Highlight row on hover */
+        }
+        p {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        ul {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .faq-section {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+        .note {
+            background-color: #e8f7e9;
+            border-left: 5px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upcoming IPOs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Upcoming IPO 2024</th>
+                <th>IPO Date</th>
+                <th>Status</th>
+                <th>IPO Type</th>
+                <th>IPO Size</th>
+                <th>Price Band</th>
+                <th>Lot Size</th>
+                <th>Allotment</th>
+                <th>Listing</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in ipo_data %} <!-- Make sure your data has the right structure -->
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[6] }}</td>
+                <td>{{ row[7] }}</td>
+                <td>{{ row[8] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <div class="faq-section">
+        <h2> IPO Frequently Asked Questions (FAQs)</h2>
+        <h3>1. What is an IPO?</h3>
+        <p>
+            An Initial Public Offering (IPO) is the process through which a private company offers its shares to the public for the first time. This allows the company to raise capital from public investors.
+        </p>
+        
+        <h3>2. Why do companies go public?</h3>
+        <p>
+            Companies go public to raise funds for expansion, pay off debt, or increase their visibility in the marketplace. Being listed on a stock exchange also enhances a company’s credibility.
+        </p>
+    
+        <h3>3. What is the process of investing in an IPO?</h3>
+        <p>
+            Investors can participate in an IPO by applying for shares through their brokerage accounts. There is usually a specified period during which investors can submit their applications.
+        </p>
+    
+        <h3>4. What are the risks associated with IPO investments?</h3>
+        <p>
+            IPOs can be volatile and carry risks. The company’s future performance is uncertain, and new public companies might not have a track record to evaluate. Investors should conduct thorough research before investing.
+        </p>
+    
+        <h3>5. How are IPO prices determined?</h3>
+        <p>
+            IPO prices are typically set by the underwriters based on factors like company valuation, market conditions, and investor demand. This process often involves roadshows and discussions with potential investors.
+        </p>
+    
+        <h3>6. Can I sell my shares immediately after an IPO?</h3>
+        <p>
+            In many cases, there are lock-up periods during which investors cannot sell their shares right after the IPO. This period usually lasts from 30 to 180 days, depending on the company and underwriters' agreements.
+        </p>
+    </div>
+    
+    <div class="note">
+        <strong>Note for Investors:</strong>
+        <p>
+            The Upcoming IPO Calendar is based on information gathered from various online sources, and the dates may vary. This page offers information on upcoming IPOs; however, we do not engage in trading or providing grey market premiums or Kostak rates for any IPOs. The current IPO list is derived from DRHP filings submitted by companies, and dates may change. Please check our Historic IPO Table for details on previously listed IPOs on the NSE and BSE.
+        </p>
+    </div>
+</body>
+</html>

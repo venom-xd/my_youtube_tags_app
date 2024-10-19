@@ -6,3 +6,6 @@ Pillow
 #app2
 croniter 
 cron-descriptor 
+requests
+beautifulsoup4
+pandas

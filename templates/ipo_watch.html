@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest IPO GMP</title>
+    <link rel="stylesheet" href="static/styles.css"> <!-- Link to your CSS file -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .upcoming {
+            border: 2px solid blue;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #e6f7ff; /* Light blue background */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: blue; /* Blue background for header */
+            color: white; /* White text for header */
+        }
+        .arrow {
+            font-weight: bold; /* Make the arrows bold */
+            font-size: 2em; /* Increase the size for better visibility */
+        }
+        .up-arrow {
+            color: green;
+            font-weight: bold; /* Already bold, can increase if needed */
+            font-size: 1.5em; /* Increase the size for better visibility */
+        }
+        
+        .down-arrow {
+            color: red;
+            font-weight: bold; /* Already bold, can increase if needed */
+            font-size: 2.5em; /* Increase the size for better visibility */
+        }
+        .no-arrow {
+            color: black;
+        }
+        #ipo-gmp {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #fff; /* White background for the new section */
+            border: 1px solid #ddd; /* Light border */
+            border-radius: 5px; /* Rounded corners */
+        }
+        #ipo-gmp h2 {
+            color: #333;
+        }
+        #ipo-gmp h3 {
+            color: #555;
+        }
+        #ipo-gmp ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Latest IPO GMP Rates</h1>
+    <div class="upcoming">
+        <h2>Upcoming IPOs</h2>
+        <p>Stay informed about the latest IPOs and their Grey Market Premium (GMP) trends. Below you will find the current IPOs along with their expected listing gains and other relevant details.</p>
+        <p><a href="/upcomingipo">View Upcoming IPOs</a></p> <!-- Link to upcoming IPOs -->
+    </div>    
+    <table>
+        <thead>
+            <tr>
+                <th>Latest IPOs</th>
+                <th>IPO GMP</th>
+                <th>GMP Trend</th>
+                <th>Price Band</th>
+                <th>Listing Gain</th>
+                <th>Expected Listing</th>
+                <th>IPO Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in ipo_data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>
+                    {% set gmp_value = row[1].replace('₹', '').strip() %}
+                    {% if gmp_value %}
+                        {% if gmp_value.startswith('-') %}
+                            {% set value_digits = gmp_value[1:] %}
+                            {% if value_digits %}
+                                <span class="down-arrow">↓</span> <!-- Red down arrow for negative values with digits -->
+                            {% else %}
+                                <span class="no-arrow">-</span> <!-- No sign for negative without digits -->
+                            {% endif %}
+                        {% elif gmp_value.isdigit() %}
+                            <span class="up-arrow">↑</span> <!-- Green up arrow for positive digits -->
+                        {% else %}
+                            <span class="no-arrow">-</span> <!-- No sign for any other cases -->
+                        {% endif %}
+                    {% else %}
+                        <span class="no-arrow">-</span> <!-- No sign if GMP is empty -->
+                    {% endif %}
+                </td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[6] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <section id="ipo-gmp">
+        <h2>Disclaimer</h2>
+        <ul>
+            <li>The IPO Grey Market Premium (GMP) values presented here are time-sensitive and may vary.</li>
+            <li>We do not engage in the buying or selling of IPO applications in the grey market.</li>
+            <li>Due to fluctuations in stock market conditions, the actual IPO listing price may differ from the projected IPO GMP.</li>
+            <li>The figures displayed are intended for educational use only. We advise against subscribing to an IPO based solely on the premium; please assess the underlying fundamentals of the companies involved.</li>
+        </ul>
+    
+        <h2>Understanding IPO GMP</h2>
+        <h3>What is IPO GMP?</h3>
+        <p>The IPO Grey Market Premium (GMP) represents the discrepancy between the trading price of IPO shares in the grey market and the issue price set by the issuing company. It reflects investor sentiment regarding the IPO.</p>
+    
+        <h3>Essential Considerations:</h3>
+        <ul>
+            <li>The grey market operates in an unofficial capacity, relying on trust between investors and brokers.</li>
+            <li>A high IPO GMP may signal strong interest in a company's shares, but it should not be viewed as a certain predictor of future performance.</li>
+        </ul>
+    
+        <h3>How to Calculate IPO GMP:</h3>
+        <p>To project the potential listing price, combine the grey market rate with the IPO issue price. For example, if the grey market rate is ₹100 and the IPO price is ₹200, the expected listing price could be approximately ₹300.</p>
+    
+        <h3>Risks of Trading in the Grey Market:</h3>
+        <p>Engaging in grey market trading is considered risky due to its unofficial status. Investors should proceed with caution and prefer the primary market for their transactions.</p>
+    
+        <h3>Importance of IPO GMP</h3>
+        <p>IPO GMP is a significant indicator for prospective investors, offering insights into market sentiment and anticipated share value. However, it's crucial to treat these numbers with caution, as they can change rapidly.</p>
+    </section>
+    
+</body>
+</html>
